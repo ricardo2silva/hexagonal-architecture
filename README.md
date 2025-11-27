@@ -341,4 +341,64 @@ public interface CustomerRepository extends MongoRepository<CustomerEntity,Strin
 }
 
 ```
+ Por fim e não menos importante precisamos criar nossa configuração dos usecase, se observamos usecase está dentro do core e lá não pode ter nenhum acoplamento de framework e de nada,
+ como nosso controller utiliza InsertCustomerInputPort que é implementado pela InsertCustomerUseCase :
 
+```java
+package com.ricardo.hexagonal_architecture.application.core.usecase;
+
+import com.ricardo.hexagonal_architecture.application.core.domain.Customer;
+import com.ricardo.hexagonal_architecture.application.ports.in.InsertCustomerInputPort;
+import com.ricardo.hexagonal_architecture.application.ports.out.FindAddressByZipCodeOutputPort;
+import com.ricardo.hexagonal_architecture.application.ports.out.InsertCustomerOutputPort;
+
+public class InsertCustomerUseCase implements InsertCustomerInputPort {
+
+    private final FindAddressByZipCodeOutputPort findAddressByZipCodeOutputPort;
+    private final InsertCustomerOutputPort insertCustomerOutputPort;
+
+    public InsertCustomerUseCase(FindAddressByZipCodeOutputPort findAddressByZipCodeOutputPort,InsertCustomerOutputPort insertCustomerOutputPort) {
+        this.findAddressByZipCodeOutputPort = findAddressByZipCodeOutputPort;
+        this.insertCustomerOutputPort = insertCustomerOutputPort;
+    }
+
+    @Override
+    public void insert(Customer customer, String zipcode) {
+        var address = findAddressByZipCodeOutputPort.find(zipcode);
+        customer.setAddress(address);
+        insertCustomerOutputPort.insert(customer);
+    }
+}
+```
+Observe que esta classe ela não é gerenciada pelo spring, então no controller injetamos ela mas precisamos criar um arquivo de configuração para que o spring gerencie o ciclo de vida dessa dependência.
+
+```java
+package com.ricardo.hexagonal_architecture.config;
+
+import com.ricardo.hexagonal_architecture.adapters.out.FindAddressByZipCodeAdapter;
+import com.ricardo.hexagonal_architecture.adapters.out.FindCustomerByIdAdapter;
+import com.ricardo.hexagonal_architecture.adapters.out.InsertCustomerAdapter;
+import com.ricardo.hexagonal_architecture.application.core.usecase.FindCustomerByIdUseCase;
+import com.ricardo.hexagonal_architecture.application.core.usecase.InsertCustomerUseCase;
+import com.ricardo.hexagonal_architecture.application.ports.in.FindCustomerByIdInputPort;
+import com.ricardo.hexagonal_architecture.application.ports.in.InsertCustomerInputPort;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class UseCaseConfig {
+
+    @Bean
+    public InsertCustomerInputPort insertCustomerInputPort(
+            FindAddressByZipCodeAdapter findAddressByZipCodeAdapter,
+            InsertCustomerAdapter insertCustomerAdapter) {
+        return new InsertCustomerUseCase(findAddressByZipCodeAdapter, insertCustomerAdapter);
+    }
+
+    @Bean
+    public FindCustomerByIdInputPort findCustomerByIdInputPort(
+            FindCustomerByIdAdapter findCustomerByIdAdapter) {
+        return new FindCustomerByIdUseCase(findCustomerByIdAdapter);
+    }
+}
+```
