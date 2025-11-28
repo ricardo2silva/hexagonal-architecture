@@ -10,6 +10,6 @@ public class CustomerRequest {
     private String name;
     @NotBlank
     private String cpf;
-    @NotBlank
+
     private String zipcode;
 }
