@@ -3,23 +3,23 @@ package com.ricardo.hexagonal_architecture.application.core.usecase;
 import com.ricardo.hexagonal_architecture.adapters.in.controllers.request.CustomerRequest;
 import com.ricardo.hexagonal_architecture.adapters.out.repositories.mapper.CustomerEntityMapper;
 import com.ricardo.hexagonal_architecture.application.core.domain.Customer;
-import com.ricardo.hexagonal_architecture.application.ports.in.UpdateCustomerByIdInputPort;
+import com.ricardo.hexagonal_architecture.application.ports.in.UpdateCustomerInputPort;
 import com.ricardo.hexagonal_architecture.application.ports.out.FindAddressByZipCodeOutputPort;
 import com.ricardo.hexagonal_architecture.application.ports.out.FindCustomerByIdOutputPort;
-import com.ricardo.hexagonal_architecture.application.ports.out.UpdateCustomerByIdOutputPort;
+import com.ricardo.hexagonal_architecture.application.ports.out.UpdateCustomerOutputPort;
 import org.apache.logging.log4j.util.Strings;
 
-public class UpdateCustomerByIdUseCase implements UpdateCustomerByIdInputPort {
+public class UpdateCustomerUseCase implements UpdateCustomerInputPort {
 
     private final FindCustomerByIdOutputPort findCustomerByIdOutputPort;
-    private final UpdateCustomerByIdOutputPort updateCustomerByIdOutputPort;
+    private final UpdateCustomerOutputPort updateCustomerByIdOutputPort;
     private final FindAddressByZipCodeOutputPort findAddressByZipCodeOutputPort;
     private final CustomerEntityMapper customerEntityMapper;
 
-    public UpdateCustomerByIdUseCase(FindCustomerByIdOutputPort findCustomerByIdOutputPort,
-                                     UpdateCustomerByIdOutputPort updateCustomerByIdOutputPort,
-                                     FindAddressByZipCodeOutputPort findAddressByZipCodeOutputPort,
-                                     CustomerEntityMapper customerEntityMapper) {
+    public UpdateCustomerUseCase(FindCustomerByIdOutputPort findCustomerByIdOutputPort,
+                                 UpdateCustomerOutputPort updateCustomerByIdOutputPort,
+                                 FindAddressByZipCodeOutputPort findAddressByZipCodeOutputPort,
+                                 CustomerEntityMapper customerEntityMapper) {
         this.findCustomerByIdOutputPort = findCustomerByIdOutputPort;
         this.updateCustomerByIdOutputPort = updateCustomerByIdOutputPort;
         this.findAddressByZipCodeOutputPort = findAddressByZipCodeOutputPort;

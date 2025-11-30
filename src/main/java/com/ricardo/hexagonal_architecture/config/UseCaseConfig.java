@@ -1,17 +1,15 @@
 package com.ricardo.hexagonal_architecture.config;
 
-import com.ricardo.hexagonal_architecture.adapters.in.controllers.mapper.CustomerMapper;
-import com.ricardo.hexagonal_architecture.adapters.out.FindAddressByZipCodeAdapter;
-import com.ricardo.hexagonal_architecture.adapters.out.FindCustomerByIdAdapter;
-import com.ricardo.hexagonal_architecture.adapters.out.InsertCustomerAdapter;
-import com.ricardo.hexagonal_architecture.adapters.out.UpdateCustomerByIdAdapter;
+import com.ricardo.hexagonal_architecture.adapters.out.*;
 import com.ricardo.hexagonal_architecture.adapters.out.repositories.mapper.CustomerEntityMapper;
+import com.ricardo.hexagonal_architecture.application.core.usecase.DeleteCustomerUseCase;
 import com.ricardo.hexagonal_architecture.application.core.usecase.FindCustomerByIdUseCase;
 import com.ricardo.hexagonal_architecture.application.core.usecase.InsertCustomerUseCase;
-import com.ricardo.hexagonal_architecture.application.core.usecase.UpdateCustomerByIdUseCase;
+import com.ricardo.hexagonal_architecture.application.core.usecase.UpdateCustomerUseCase;
+import com.ricardo.hexagonal_architecture.application.ports.in.DeleteCustomerInputPort;
 import com.ricardo.hexagonal_architecture.application.ports.in.FindCustomerByIdInputPort;
 import com.ricardo.hexagonal_architecture.application.ports.in.InsertCustomerInputPort;
-import com.ricardo.hexagonal_architecture.application.ports.in.UpdateCustomerByIdInputPort;
+import com.ricardo.hexagonal_architecture.application.ports.in.UpdateCustomerInputPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,9 +30,14 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public UpdateCustomerByIdInputPort updateCustomerByIdInputPort(
-            FindCustomerByIdAdapter findCustomerByIdAdapter, UpdateCustomerByIdAdapter updateCustomerByIdAdapter,FindAddressByZipCodeAdapter findAddressByZipCodeAdapter, CustomerEntityMapper customerEntityMapper) {
-        return new UpdateCustomerByIdUseCase(findCustomerByIdAdapter,updateCustomerByIdAdapter,findAddressByZipCodeAdapter,customerEntityMapper);
+    public UpdateCustomerInputPort updateCustomerByIdInputPort(
+            FindCustomerByIdAdapter findCustomerByIdAdapter, UpdateCustomerAdapter updateCustomerByIdAdapter, FindAddressByZipCodeAdapter findAddressByZipCodeAdapter, CustomerEntityMapper customerEntityMapper) {
+        return new UpdateCustomerUseCase(findCustomerByIdAdapter,updateCustomerByIdAdapter,findAddressByZipCodeAdapter,customerEntityMapper);
+    }
+
+    @Bean
+    public DeleteCustomerInputPort deleteCustomerInputPort(DeleteCustomerAdapter deleteCustomerAdapter) {
+        return new DeleteCustomerUseCase(deleteCustomerAdapter);
     }
 }
 

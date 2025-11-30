@@ -4,13 +4,13 @@ import com.ricardo.hexagonal_architecture.adapters.out.repositories.CustomerRepo
 import com.ricardo.hexagonal_architecture.adapters.out.repositories.entities.CustomerEntity;
 import com.ricardo.hexagonal_architecture.adapters.out.repositories.mapper.CustomerEntityMapper;
 import com.ricardo.hexagonal_architecture.application.core.domain.Customer;
-import com.ricardo.hexagonal_architecture.application.ports.out.UpdateCustomerByIdOutputPort;
+import com.ricardo.hexagonal_architecture.application.ports.out.UpdateCustomerOutputPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UpdateCustomerByIdAdapter implements UpdateCustomerByIdOutputPort {
+public class UpdateCustomerAdapter implements UpdateCustomerOutputPort {
 
     private final CustomerRepository customerRepository;
     private final CustomerEntityMapper customerEntityMapper;
