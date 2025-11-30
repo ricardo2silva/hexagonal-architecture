@@ -46,6 +46,6 @@ public class CustomerController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") final String id ){
         deleteCustomerInputPort.delete(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }
