@@ -3,6 +3,7 @@ package com.ricardo.hexagonal_architecture.application.core.usecase;
 import com.ricardo.hexagonal_architecture.adapters.in.controllers.request.CustomerRequest;
 import com.ricardo.hexagonal_architecture.adapters.out.repositories.mapper.CustomerEntityMapper;
 import com.ricardo.hexagonal_architecture.application.core.domain.Customer;
+import com.ricardo.hexagonal_architecture.application.core.exceptions.CustomerNotFoundException;
 import com.ricardo.hexagonal_architecture.application.ports.in.UpdateCustomerInputPort;
 import com.ricardo.hexagonal_architecture.application.ports.out.FindAddressByZipCodeOutputPort;
 import com.ricardo.hexagonal_architecture.application.ports.out.FindCustomerByIdOutputPort;
@@ -28,7 +29,7 @@ public class UpdateCustomerUseCase implements UpdateCustomerInputPort {
 
     @Override
     public Customer update(String id, CustomerRequest customerRequest) {
-        var customer = findCustomerByIdOutputPort.findById(id).orElseThrow(() -> new RuntimeException("customer not found"));
+        var customer = findCustomerByIdOutputPort.findById(id).orElseThrow(() -> new CustomerNotFoundException("customer not found"));
         if(Strings.isNotBlank(customerRequest.getZipcode())) {
             var address = findAddressByZipCodeOutputPort.find(customerRequest.getZipcode());
             customer.setAddress(address);

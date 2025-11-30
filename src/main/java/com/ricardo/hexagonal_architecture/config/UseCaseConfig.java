@@ -36,8 +36,8 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public DeleteCustomerInputPort deleteCustomerInputPort(DeleteCustomerAdapter deleteCustomerAdapter) {
-        return new DeleteCustomerUseCase(deleteCustomerAdapter);
+    public DeleteCustomerInputPort deleteCustomerInputPort(DeleteCustomerAdapter deleteCustomerAdapter,FindCustomerByIdAdapter findCustomerByIdAdapter) {
+        return new DeleteCustomerUseCase(deleteCustomerAdapter,findCustomerByIdAdapter);
     }
 }
 
